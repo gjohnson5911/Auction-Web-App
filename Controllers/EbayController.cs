@@ -110,7 +110,7 @@ namespace Auction.Controllers
                 //get current user
                 User currentUser = context.Users.FirstOrDefault(u=>u.Id == HttpContext.Session.GetInt32("UserId"));
                 //get all sales
-                IEnumerable<Sale> allSales = context.Sales.Include(s=>s.TopBidUser).Include(s=>s.Owner).ToList();
+                IEnumerable<Sale> allSales = context.Sales.Include(s=>s.TopBid).Include(s=>s.Owner).ToList();
                 //check for any auctions that have ended and update DB accordingly
                 User winner;
                 User owner;
@@ -119,12 +119,12 @@ namespace Auction.Controllers
                     if(act.EndDate <= DateTime.Now.Date)
                     {
                         //get top bidder
-                        winner = act.TopBidUser;
+                        winner = act.TopBid.BidUser;
                         //get auction owner
                         owner = act.Owner;
                         //subtract winning bid from user's biddingamount and add to owner's wallet
-                        winner.BiddingAmount -= act.TopBid;
-                        owner.WalletAmount += act.TopBid;
+                        winner.BiddingAmount -= act.TopBid.Amount;
+                        owner.WalletAmount += act.TopBid.Amount;
                         //delete sale
                         context.Sales.Remove(act);
                     }
@@ -186,7 +186,7 @@ namespace Auction.Controllers
                 //get current user
                 User currentUser = context.Users.FirstOrDefault(u=>u.Id == (int)HttpContext.Session.GetInt32("UserId"));
                 //get current sale and set time remaining
-                Sale currentSale = context.Sales.Include(s=>s.TopBidUser).Include(s=>s.Owner).FirstOrDefault(s=>s.Id == saleId);
+                Sale currentSale = context.Sales.Include(s=>s.TopBid).Include(s=>s.Owner).FirstOrDefault(s=>s.Id == saleId);
                 int days = (currentSale.EndDate - DateTime.Now).Days;
                 currentSale.Remaining = days+1;
                 //set data in ViewBag
@@ -218,16 +218,14 @@ namespace Auction.Controllers
                 }
                 else
                 {
-                newSaleAttempt.TopBid = 0.00;
-                newSaleAttempt.OwnerId = (int)HttpContext.Session.GetInt32("UserId");
-                newSaleAttempt.Created_At = DateTime.Now;
-                newSaleAttempt.Updated_At = DateTime.Now;
-                newSaleAttempt.TopBidUserId = (int)HttpContext.Session.GetInt32("UserId");
-                //add to DB and save
-                context.Sales.Add(newSaleAttempt);
-                context.SaveChanges();
-                //send to individual auction page
-                return RedirectToAction("AuctionPage", new {saleId = newSaleAttempt.Id});
+                    newSaleAttempt.OwnerId = (int)HttpContext.Session.GetInt32("UserId");
+                    newSaleAttempt.Created_At = DateTime.Now;
+                    newSaleAttempt.Updated_At = DateTime.Now;
+                    //add to DB and save
+                    context.Sales.Add(newSaleAttempt);
+                    context.SaveChanges();
+                    //send to individual auction page
+                    return RedirectToAction("AuctionPage", new {saleId = newSaleAttempt.Id});
                 }
             }
             return View("CreateAuction");
@@ -238,11 +236,11 @@ namespace Auction.Controllers
         public IActionResult DeleteAuction(int saleId)
         {
             //get sale being deleted
-            Sale deleteSale = context.Sales.Include(s=>s.TopBidUser).FirstOrDefault(s=>s.Id == saleId);
+            Sale deleteSale = context.Sales.Include(s=>s.TopBid).FirstOrDefault(s=>s.Id == saleId);
             //return top bid amount to topbid user's wallet and subtract from biddingamount
-            User topBidder = deleteSale.TopBidUser;
-            topBidder.WalletAmount += deleteSale.TopBid;
-            topBidder.BiddingAmount -= deleteSale.TopBid;
+            User topBidder = deleteSale.TopBid.BidUser;
+            topBidder.WalletAmount += deleteSale.TopBid.Amount;
+            topBidder.BiddingAmount -= deleteSale.TopBid.Amount;
             //remove and save changes
             context.Sales.Remove(deleteSale);
             context.SaveChanges();
@@ -257,22 +255,31 @@ namespace Auction.Controllers
             //get current user
             User currentUser = context.Users.FirstOrDefault(u=>u.Id == (int)HttpContext.Session.GetInt32("UserId"));
             //get current sale
-            Sale currentSale = context.Sales.Include(s=>s.TopBidUser).FirstOrDefault(s=>s.Id == saleId);
+            Sale currentSale = context.Sales.Include(s=>s.TopBid).FirstOrDefault(s=>s.Id == saleId);
             //check if user has enough to make the bid
             if(currentUser.WalletAmount > newBid)
             {
                 //check if newbid is more than the sale's current top bid
-                if(currentSale.TopBid < newBid)
+                if(currentSale.TopBid.Amount < newBid)
                 {
                     //subtract previous topbid from topbiduser's biddingamount and add to walletamount
-                    currentSale.TopBidUser.BiddingAmount -= currentSale.TopBid;
-                    currentSale.TopBidUser.WalletAmount += currentSale.TopBid;
+                    currentSale.TopBid.BidUser.BiddingAmount -= currentSale.TopBid.Amount;
+                    currentSale.TopBid.BidUser.WalletAmount += currentSale.TopBid.Amount;
                     //subtract newbid from user's walletamount and add to biddingamount
                     currentUser.WalletAmount -= newBid;
                     currentUser.BiddingAmount += newBid;
-                    //set sale's top bid to newbid, and change topbidid
-                    currentSale.TopBid = newBid;
-                    currentSale.TopBidUserId = currentUser.Id;
+                    //create a new bid
+                    Bid newBidItem = new Bid {
+                        Amount = newBid,
+                        BidUserId = currentUser.Id,
+                        Created_At = DateTime.Now,
+                        Updated_At = DateTime.Now
+                    };
+                    //add to DB and save changes
+                    context.Bids.Add(newBidItem);
+                    context.SaveChanges();
+                    //set sale's top bid to newbiditem
+                    currentSale.TopBid = newBidItem;
                     //save changes
                     context.SaveChanges();
                     //redirect to bid's individual page
@@ -290,7 +297,7 @@ namespace Auction.Controllers
             //get current user
             currentUser = context.Users.FirstOrDefault(u=>u.Id == (int)HttpContext.Session.GetInt32("UserId"));
             //get current sale and set time remaining
-            currentSale = context.Sales.Include(s=>s.TopBidUser).Include(s=>s.Owner).FirstOrDefault(s=>s.Id == saleId);
+            currentSale = context.Sales.Include(s=>s.TopBid).Include(s=>s.Owner).FirstOrDefault(s=>s.Id == saleId);
             int days = (currentSale.EndDate - DateTime.Now).Days;
             currentSale.Remaining = days+1;
             //set data in ViewBag

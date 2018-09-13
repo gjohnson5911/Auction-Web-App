@@ -8,11 +8,13 @@
 <p>Time remaining: @ViewBag.Sale.Remaining days</p>
 <p id="desc">@ViewBag.Sale.Description</p>
 @{
-    if(ViewBag.Sale.TopBidUserId == ViewBag.User.Id)
+    //if current user is the top bidder of this item
+    if(ViewBag.Sale.TopBid.BidUser == ViewBag.User.Id)
     {
         <p>Congrats, @ViewBag.User.FirstName, you have the current highest bid!</p>
         <p>Current bid: @ViewBag.Sale.TopBid</p>
-    }else if(ViewBag.Sale.TopBid == 0)
+    }//if nobody has bid on this item
+    else if(ViewBag.Sale.TopBid == null)
     {
         
         @Html.ValidationSummary(false, "")

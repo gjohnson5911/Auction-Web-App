@@ -24,16 +24,13 @@ namespace Auction.Models
         [Required]
         public DateTime EndDate {get; set;}
 
-        [DataType(DataType.Currency)]
-        public double TopBid {get; set;}
+        public Bid TopBid {get; set;}
+
+        public int TopBidId {get; set;}
 
         public int OwnerId {get; set;}
 
         public User Owner {get; set;}
-
-        public int TopBidUserId {get; set;}
-
-        public User TopBidUser {get; set;}
 
         public DateTime Created_At {get; set;}
 

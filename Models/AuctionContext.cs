@@ -9,5 +9,6 @@ namespace Auction.Models
 
         public DbSet<User> Users {get; set;}
         public DbSet<Sale> Sales {get; set;}
+        public DbSet<Bid> Bids {get; set;}
     }
 }

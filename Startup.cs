@@ -23,7 +23,7 @@ namespace Auction
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<AuctionContext>(options=>options.UseMySQL(Configuration["DBInfo:ConnectionString"]));
+            services.AddDbContext<AuctionContext>(options=>options.UseMySQL(Configuration["DBInfo2:ConnectionString"]));
             services.AddSession();
             services.AddMvc();
         }

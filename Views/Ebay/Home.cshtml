@@ -19,7 +19,7 @@
             <tr>
                 <td><a href="@sale.Id">@sale.ProductName</a></td>
                 <td>@sale.Owner.FirstName</td>
-                <td>$@sale.TopBid</td>
+                <td>$@sale.TopBid.Amount</td>
                 <td>@sale.Remaining days</td>
                 @if(@sale.Owner.Id == @ViewBag.User.Id)
                 {
