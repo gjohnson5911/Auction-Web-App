@@ -1,0 +1,48 @@
+<link rel="stylesheet" href="~/css/auctionpage.css"/>
+<header>
+    <h1>@ViewBag.Sale.ProductName</h1>
+    <p>Created by: @ViewBag.Sale.Owner.FirstName</p>
+    <a href="current">Home</a>
+    <a href="/">Logout</a>
+</header>
+<p>Time remaining: @ViewBag.Sale.Remaining days</p>
+<p id="desc">@ViewBag.Sale.Description</p>
+@{
+    if(ViewBag.Sale.TopBidUserId == ViewBag.User.Id)
+    {
+        <p>Congrats, @ViewBag.User.FirstName, you have the current highest bid!</p>
+        <p>Current bid: @ViewBag.Sale.TopBid</p>
+    }else if(ViewBag.Sale.TopBid == 0)
+    {
+        
+        @Html.ValidationSummary(false, "")
+        <div class="bidleft">
+            <p>Starting bid: @ViewBag.Sale.StartingBid</p>
+        </div>
+        <div class="bidright">
+            <form action="/auctions/@ViewBag.Sale.Id/Bid" method="POST">
+                <input type="number" name="newBid" placeholder="Your bid goes here..." step=".01">
+                <br>
+                <input type="submit" value="Bid!!" id="bidbutton">
+            </form>
+        </div>
+    }
+    else
+    {
+        @Html.ValidationSummary(false, "")
+        <div class="bidleft">
+            <p>Current Highest Bid:</p>
+            <p>$@ViewBag.Sale.TopBid</p>
+
+        </div>
+        <div class="bidright">
+            <p>By @ViewBag.Sale.TopBidUser.FirstName @ViewBag.Sale.TopBidUser.LastName</p>
+            <form action="/auctions/@ViewBag.Sale.Id/Bid" method="POST">
+                <input type="number" name="newBid" placeholder="Your bid goes here..." step=".01">
+                <br>
+                <input type="submit" value="Bid!!" id="bidbutton">
+            </form>
+        </div>
+    }
+}
+

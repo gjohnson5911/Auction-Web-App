@@ -1,0 +1,64 @@
+/* CSS for logreg.cshtml */
+#registration input, #login input{
+    display: inline-block;
+    margin: 20px 10px;
+}
+#logbutton {
+    margin-left: 100px;
+}
+#registration label {
+    margin-left: 10px;
+    margin-right: 115px;
+}
+#regbutton {
+    margin-left: 60px;
+}
+#registration h1 {
+    margin-bottom: 20px;
+}
+/* CSS for header  */
+header {
+    width: 960px;
+}
+header h1 {
+    display: inline-block;
+}
+header p {
+    display: inline-block;
+    margin-left: 560px;
+    margin-right: 20px;
+}
+header a {
+    text-decoration-line: underline;
+}
+/* CSS for home.cshtml */
+table {
+    width: 960px;
+    
+    border: 1px solid black;
+}
+tr {
+    padding: 5px;
+}
+tr:nth-child(even) {
+    background-color: #eeeeee;
+}
+tr:first-child {
+    background-color: #ccc;
+}
+td, th {
+    padding: 5px;
+    border-right: 1px solid black;
+    border-left: 1px solid black;
+}
+#footy a.btn {
+    -webkit-appearance: button;
+    -moz-appearance: button;
+    appearance: button;
+    color: black;
+    margin-top: 10px;
+}
+#footy p {
+    display: inline-block;
+    margin-left: 663px;
+}

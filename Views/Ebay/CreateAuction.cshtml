@@ -1,0 +1,29 @@
+@using Auction.Models
+@model Sale
+<link rel="stylesheet" href="~/css/newauction.css"/>
+<header>
+    <h1>New Auction</h1>
+    <a href="current">Home</a>
+    <a href="/">Logout</a>
+</header>
+@Html.ValidationSummary(false, "")
+<form action="new" method="POST">
+    <label asp-for="ProductName">Product Name</label>
+    <label asp-for="StartingBid">Starting Bid</label>
+    <br>
+
+    <input type="text" asp-for="ProductName">
+    <input asp-for="StartingBid" type="number" step=".01" min="0">
+    <br>
+
+    <label asp-for="Description">Description</label>
+    <br>
+    <input type="text" asp-for="Description" id="desc">
+    <div id="datefield">
+        <label asp-for="EndDate" id="dateLabel">End Date</label>
+        <input type="date" min="@ViewBag.Today" asp-for="EndDate" id="datefield">
+    </div>
+    <br>
+
+    <input type="submit" value="Create Auction" id="auctionbutton">
+</form>

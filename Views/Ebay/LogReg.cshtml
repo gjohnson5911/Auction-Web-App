@@ -1,0 +1,38 @@
+@using Auction.Models
+@model User
+<link rel="stylesheet" href="~/css/styles.css"/>
+@Html.ValidationSummary(false, "")
+<div id="login">
+    <h1>Login</h1>
+    <form action="LogIn", method="POST">
+        <label for="userAttempt">Username</label>
+        <input type="text" name="userAttempt">
+        <br>
+        <label for="passAttempt">Password</label>
+        <input type="password" name="passAttempt">
+
+        <input type="submit" value="Login" id="logbutton">
+    </form>
+</div>
+<div id="registration">
+    <h1>Registration</h1>
+    <form asp-action="register" method="POST">
+        <label asp-for="Username">Username</label>
+        <label asp-for="FirstName">First Name</label>
+        <br>
+        <input type="text" asp-for="Username">
+        <input type="text" asp-for="FirstName">
+        <br>
+        <label asp-for="Password">Password</label>
+        <label asp-for="LastName">Last Name</label>
+        <br>
+        <input type="password" asp-for="Password">
+        <input type="text" asp-for="LastName">
+        <br>
+        <label asp-for="Confirm">Confirm Password</label>
+        <br>
+        <input type="password" asp-for="Confirm">
+
+        <input type="submit" value="Register" id="regbutton">
+    </form>
+</div>

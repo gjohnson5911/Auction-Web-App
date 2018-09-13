@@ -1,0 +1,46 @@
+header {
+    width: 960px;
+}
+header h1 {
+    display: inline-block;
+}
+header a {
+    text-decoration-line: underline;
+}
+header :nth-child(2) {
+    margin-left: 600px;
+    margin-right: 20px;
+}
+input {
+    display: inline-block;
+    margin: 20px 20px;
+    width: 250px;
+}
+label {
+    margin-left: 20px;
+    margin-right: 174px;
+}
+#desc {
+    height: 200px;
+}
+/* form :nth-child(10) {
+    vertical-align: top;
+    margin-top: 15px;
+    display: inline-block;
+} */
+#datefield {
+    display: inline;
+    vertical-align: top;
+}
+#datefield label {
+    vertical-align: top;
+    margin-top: 15px;
+    display: inline-block;
+}
+#datefield input {
+    margin-left: -240px;
+    margin-top: 35px;
+}
+#auctionbutton {
+    width: auto;
+}

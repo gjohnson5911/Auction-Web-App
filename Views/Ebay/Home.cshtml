@@ -1,0 +1,38 @@
+<link rel="stylesheet" href="~/css/styles.css"/>
+<header>
+    <h1>Current Auctions</h1>
+    <p>Hi, @ViewBag.User.FirstName!</p>
+    <a href="/">Logout</a>
+</header>
+<table>
+    <tr>
+        <th>Product</th>
+        <th>Seller</th>
+        <th>Top Bid</th>
+        <th>Time Remaining</th>
+        <th></th>
+    </tr>
+    @{
+        int compareDate;
+        foreach(var sale in ViewBag.Sales)
+        {
+            <tr>
+                <td><a href="@sale.Id">@sale.ProductName</a></td>
+                <td>@sale.Owner.FirstName</td>
+                <td>$@sale.TopBid</td>
+                <td>@sale.Remaining days</td>
+                @if(@sale.Owner.Id == @ViewBag.User.Id)
+                {
+                    <td><a href="@sale.Id/delete">Delete</a></td>
+                }else
+                {
+                    <td></td>
+                }
+            </tr>
+        }
+    }
+</table>
+<div id="footy">
+    <a class = "btn" href="/auctions/create" id="newAuction">New Auction</a>
+    <p>Your Current Wallet: $@ViewBag.User.WalletAmount</p>
+</div>

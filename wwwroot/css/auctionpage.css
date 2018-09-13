@@ -1,0 +1,39 @@
+header {
+    width: 960px;
+}
+header h1 {
+    display: inline-block;
+}
+header p {
+    display: inline-block;
+    margin-left: 60px;
+    margin-right: 400px;
+    font-size: 120%;
+}
+header a {
+    text-decoration-line: underline;
+    margin-left: 15px;
+}
+p {
+    margin-bottom: 20px;
+}
+#desc {
+    font-style: italic;
+    font-weight: bold;
+    display: inline-block;
+}
+.bidleft {
+    width: 130px;
+    vertical-align: top;
+    display: inline-block;
+    text-align: center;
+    margin-right: 200px;
+}
+.bidright {
+    width: 400px;
+    vertical-align: top;
+    display: inline-block;
+}
+#bidbutton {
+    margin: 20px 120px;
+}
