@@ -9,12 +9,12 @@
 <p id="desc">@ViewBag.Sale.Description</p>
 @{
     //if current user is the top bidder of this item
-    if(ViewBag.Sale.TopBid.BidUser == ViewBag.User.Id)
+    if(ViewBag.Sale.TopBid.BidUserId == ViewBag.User.Id)
     {
         <p>Congrats, @ViewBag.User.FirstName, you have the current highest bid!</p>
         <p>Current bid: @ViewBag.Sale.TopBid</p>
     }//if nobody has bid on this item
-    else if(ViewBag.Sale.TopBid == null)
+    else if(ViewBag.Sale.TopBid.Amount == 0)
     {
         
         @Html.ValidationSummary(false, "")

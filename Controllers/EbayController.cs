@@ -218,9 +218,21 @@ namespace Auction.Controllers
                 }
                 else
                 {
+                    //create a top bid
+                    Bid topBid = new Bid {
+                        Amount = 0.00,
+                        BidUserId = (int) HttpContext.Session.GetInt32("UserId"),
+                        Created_At = DateTime.Now,
+                        Updated_At = DateTime.Now
+                    };
+                    //add to db and save
+                    context.Bids.Add(topBid);
+                    context.SaveChanges();
+                    //set values for newsaleattempt
                     newSaleAttempt.OwnerId = (int)HttpContext.Session.GetInt32("UserId");
                     newSaleAttempt.Created_At = DateTime.Now;
                     newSaleAttempt.Updated_At = DateTime.Now;
+                    newSaleAttempt.TopBidId = topBid.Id;
                     //add to DB and save
                     context.Sales.Add(newSaleAttempt);
                     context.SaveChanges();
@@ -237,15 +249,28 @@ namespace Auction.Controllers
         {
             //get sale being deleted
             Sale deleteSale = context.Sales.Include(s=>s.TopBid).FirstOrDefault(s=>s.Id == saleId);
-            //return top bid amount to topbid user's wallet and subtract from biddingamount
-            User topBidder = deleteSale.TopBid.BidUser;
-            topBidder.WalletAmount += deleteSale.TopBid.Amount;
-            topBidder.BiddingAmount -= deleteSale.TopBid.Amount;
-            //remove and save changes
-            context.Sales.Remove(deleteSale);
-            context.SaveChanges();
-            //redirect to home
-            return RedirectToAction("Home");
+            Bid topBid = deleteSale.TopBid;
+            //check if there have been any bids made
+            if(topBid.Amount!=0.00){//at least one bid exists
+                //return top bid amount to topbid user's wallet and subtract from biddingamount
+                User topBidder = topBid.BidUser;
+                topBidder.WalletAmount += topBid.Amount;
+                topBidder.BiddingAmount -= topBid.Amount;
+                //remove bid and sale, then save changes
+                context.Bids.Remove(topBid);
+                context.Sales.Remove(deleteSale);
+                context.SaveChanges();
+                //redirect to home
+                return RedirectToAction("Home");
+            }else //no bids have been made 
+            {
+                //remove bid and sale, then savechanges
+                context.Bids.Remove(topBid);
+                context.Sales.Remove(deleteSale);
+                context.SaveChanges();
+                //redirect to home
+                return RedirectToAction("Home");
+            }
         }
 
         //bid on auction
