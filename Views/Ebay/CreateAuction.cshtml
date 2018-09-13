@@ -18,7 +18,8 @@
 
     <label asp-for="Description">Description</label>
     <br>
-    <input type="text" asp-for="Description" id="desc">
+    <textarea asp-for="Description" id="desc" rows="5" cols="40"></textarea>
+    <!-- <input type="text" asp-for="Description" id="desc"> -->
     <div id="datefield">
         <label asp-for="EndDate" id="dateLabel">End Date</label>
         <input type="date" min="@ViewBag.Today" asp-for="EndDate" id="datefield">
