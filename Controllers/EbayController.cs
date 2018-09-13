@@ -104,7 +104,7 @@ namespace Auction.Controllers
         [HttpGet("Auctions/Current")]
         public IActionResult Home()
         {
-            //check that user is logged in
+            //check that user is logged in 
             if(HttpContext.Session.GetInt32("UserId") != null)
             {
                 //get current user
