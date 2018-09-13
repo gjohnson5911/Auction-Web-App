@@ -21,13 +21,8 @@ label {
     margin-right: 174px;
 }
 #desc {
-    height: 200px;
+    padding: 0 0 200px 0;
 }
-/* form :nth-child(10) {
-    vertical-align: top;
-    margin-top: 15px;
-    display: inline-block;
-} */
 #datefield {
     display: inline;
     vertical-align: top;
