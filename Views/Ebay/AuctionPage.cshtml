@@ -12,7 +12,7 @@
     if(ViewBag.Sale.TopBid.BidUserId == ViewBag.User.Id)
     {
         <p>Congrats, @ViewBag.User.FirstName, you have the current highest bid!</p>
-        <p>Current bid: @ViewBag.Sale.TopBid</p>
+        <p>Current bid: @ViewBag.Sale.TopBid.Amount</p>
     }//if nobody has bid on this item
     else if(ViewBag.Sale.TopBid.Amount == 0)
     {
@@ -34,7 +34,7 @@
         @Html.ValidationSummary(false, "")
         <div class="bidleft">
             <p>Current Highest Bid:</p>
-            <p>$@ViewBag.Sale.TopBid</p>
+            <p>$@ViewBag.Sale.TopBid.Amount</p>
 
         </div>
         <div class="bidright">
