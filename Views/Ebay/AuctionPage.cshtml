@@ -8,8 +8,19 @@
 <p>Time remaining: @ViewBag.Sale.Remaining days</p>
 <p id="desc">@ViewBag.Sale.Description</p>
 @{
-    //if current user is the top bidder of this item
-    if(ViewBag.Sale.TopBid.BidUserId == ViewBag.User.Id)
+    //if this item is owned by the current user and has no bids
+    if(ViewBag.Sale.OwnerId == ViewBag.User.Id && ViewBag.Sale.TopBid.Amount == 0.00)
+    {
+        <p>This is your auction.</p>
+        <p>Sorry, nobody has bid on this yet.</p>
+        <p>Starting bid: @ViewBag.Sale.StartingBid</p>
+    }//if this item is owned by the current user and has been bid on
+    else if(ViewBag.Sale.OwnerId == ViewBag.User.Id && ViewBag.Sale.TopBid.Amount > 0.00)
+    {
+        <p>This is your auction.</p>
+        <p>Current bid: @ViewBag.Sale.TopBid.Amount</p>
+    }//if current user is the top bidder of this item
+    else if(ViewBag.Sale.TopBid.BidUserId == ViewBag.User.Id)
     {
         <p>Congrats, @ViewBag.User.FirstName, you have the current highest bid!</p>
         <p>Current bid: @ViewBag.Sale.TopBid.Amount</p>
